@@ -5,7 +5,7 @@
     "license": "MIT",
     "homepage": "https://faba.com",
     "repository": {
-      "url": "https://github.com/afrivera838/semantic-version-test",
+      "url": "git@github.com:afrivera838/semantic-version-test.git",
       "type": "git"
     },
     "peerDependencies": {
