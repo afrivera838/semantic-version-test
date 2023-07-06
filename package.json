@@ -14,7 +14,11 @@
     "release": {
       "branches": [
         "master"
-      ]
+      ],
+      "anaylzeCommits": {
+        "minor": ["feat"],
+        "patch": ["fix", "perf"]
+      }
     },
     "files": [
     ],
