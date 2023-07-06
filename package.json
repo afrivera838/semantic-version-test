@@ -3,11 +3,9 @@
     "version": "0.1.0",
     "private": false,
     "license": "MIT",
-    "main": "dist/index.js",
-    "typings": "dist/index.d.ts",
-    "homepage": "https://fernando-herrera.com",
+    "homepage": "https://faba.com",
     "repository": {
-      "url": "https://github.com/Klerith/sb-components",
+      "url": "https://github.com/afrivera838/semantic-version-test",
       "type": "git"
     },
     "peerDependencies": {
@@ -15,12 +13,10 @@
     },
     "release": {
       "branches": [
-        "main"
+        "master"
       ]
     },
     "files": [
-      "dist",
-      "src"
     ],
     "dependencies": {
       "@testing-library/jest-dom": "^5.11.4",
