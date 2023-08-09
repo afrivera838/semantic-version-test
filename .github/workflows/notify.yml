@@ -27,6 +27,7 @@ jobs:
               value: Custom Fact Value 1
             - name: Pull Request example
           environment: development
+          show-on-exit: false
           show-on-failure: true
 
   notify_teams_merge:
