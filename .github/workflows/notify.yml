@@ -21,7 +21,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
-          card-layout-start: compact
+          # card-layout-start: compact
           custom-facts: |
             - name: Custom Fact Name 1
               value: Custom Fact Value 1
