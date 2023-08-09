@@ -30,19 +30,30 @@ jobs:
           show-on-exit: false
           show-on-failure: true
 
-  notify_teams_merge:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+  if_failure:
+    name: Only if failure
+    runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
-        if: always()
+      - uses: actions/checkout@master
+      - name: Microsoft Teams Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
         with:
-          github-token: ${{ github.token }}
-          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
-          custom-facts: |
-            - name: Custom Fact Name 1
-              value: Custom Fact Value 1
-            - name: Pull Request example
-          environment: development
-          show-on-failure: true
+          webhook_url: ${{ secrets.TEAMS_WEBHOOK }}
+
+  #notify_teams_merge:
+  #  if: github.event.pull_request.merged == true
+   # runs-on: ubuntu-latest
+    #steps:
+    #  - uses: actions/checkout@v2
+     # - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+      #  if: always()
+       # with:
+        #  github-token: ${{ github.token }}
+        #  webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+         # custom-facts: |
+          #  - name: Custom Fact Name 1
+           #   value: Custom Fact Value 1
+           # - name: Pull Request example
+          #environment: development
+          #show-on-failure: true
