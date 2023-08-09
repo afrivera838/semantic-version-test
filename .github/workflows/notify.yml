@@ -16,11 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: nokamoto/merge-conflict-action@v0.0.4
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
         with:
-          owner: nokamoto
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
@@ -29,16 +27,15 @@ jobs:
               value: Custom Fact Value 1
             - name: Pull Request example
           environment: development
-          show-on-exit: false
           show-on-failure: true
 
   if_failure:
     name: Only if failure
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Microsoft Teams Notification
-        uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        uses: toko-bifrost/ms-teams-deploy-card@master 
         if: failure()
         with:
           webhook_url: ${{ secrets.TEAMS_WEBHOOK }}
