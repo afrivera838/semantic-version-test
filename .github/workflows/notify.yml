@@ -12,7 +12,26 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
- 
+  notify_teams:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nokamoto/merge-conflict-action@v0.0.4
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          owner: nokamoto
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          # card-layout-start: compact
+          custom-facts: |
+            - name: Custom Fact Name 1
+              value: Custom Fact Value 1
+            - name: Pull Request example
+          environment: development
+          show-on-exit: false
+          show-on-failure: true
+
   if_failure:
     name: Only if failure
     runs-on: ubuntu-18.04
