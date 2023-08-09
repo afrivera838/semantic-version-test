@@ -16,8 +16,8 @@
         "master"
       ],
       "anaylzeCommits": {
-        "minor": ["feat"],
-        "patch": ["fix", "perf"]
+        "minor": ["feat", "refactor", "test", "revert", "build"],
+        "patch": ["fix", "perf", "docs", "style", "chore", "ci"]
       }
     },
     "files": [
