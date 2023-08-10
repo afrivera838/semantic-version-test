@@ -101,7 +101,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@abacenters/aba-storybook-fe": "^0.0.17",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@reduxjs/toolkit": "^1.9.5",
