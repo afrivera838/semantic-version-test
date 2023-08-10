@@ -5,8 +5,7 @@ name: Pull Request Notify Teams
 # Controls when the workflow will run
 on:
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
     types: [opened, synchronize, reopened, labeled]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -29,16 +28,6 @@ jobs:
           environment: development
           show-on-failure: true
 
-  if_failure:
-    name: Only if failure
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Microsoft Teams Notification
-        uses: toko-bifrost/ms-teams-deploy-card@master 
-        if: failure()
-        with:
-          webhook_url: ${{ secrets.TEAMS_WEBHOOK }}
 
   #notify_teams_merge:
   #  if: github.event.pull_request.merged == true

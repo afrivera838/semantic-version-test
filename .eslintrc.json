@@ -1,0 +1,23 @@
+{
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "parser": "babel-eslint",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "amd": true,
+    "node": true
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "no-console": "error",
+    "no-debugger": "error",
+    "arrow-body-style": ["error", "as-needed"]
+  }
+}
