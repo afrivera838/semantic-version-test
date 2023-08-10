@@ -2,7 +2,6 @@ name: Pull Request Development
 
 on:
   pull_request:
-    branches: [ development ]
     types: [opened, synchronize, reopened]
 
 jobs:
