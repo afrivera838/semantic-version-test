@@ -28,7 +28,7 @@ jobs:
   notify_teams:
     needs: run_tests
     runs-on: ubuntu-latest
-    if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
+    if: ${{ success() }}
     
     steps:
       - uses: actions/checkout@v2
@@ -38,6 +38,32 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
+          environment: development
+          show-on-failure: true   
+
+  notify_teams_failed:
+    needs: run_tests
+    runs-on: ubuntu-latest
+    if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set PR Status to Failure
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/statuses/${{ github.sha }}
+          token: ${{ github.token }}
+          state: Failure
+          description: Tests passed
+          context: CI/Tests
+
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          card-layout-start: compact
           environment: development
           show-on-failure: true   
   
