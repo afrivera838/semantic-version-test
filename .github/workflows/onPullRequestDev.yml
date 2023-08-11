@@ -54,8 +54,9 @@ jobs:
         with:
           route: POST /repos/${{ github.repository }}/statuses/${{ github.sha }}
           token: ${{ github.token }}
-          state: Failure
-          description: Tests passed
+          state: field
+          status: field
+          description: Tests not passed
           context: CI/Tests
 
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
