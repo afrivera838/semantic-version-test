@@ -24,11 +24,13 @@ jobs:
 
       - name: Create coverage
         run: npm run test -- --coverage
+      
+      - name: Sleep for 2 seconds
+        run: sleep 2s
         
   notify_teams:
     needs: run_tests
     runs-on: ubuntu-latest
-    if: ${{ success() }}
     
     steps:
       - uses: actions/checkout@v2
@@ -40,39 +42,3 @@ jobs:
           # card-layout-start: compact
           environment: development
           show-on-failure: true   
-
-  change_status:
-    needs: run_tests
-    runs-on: ubuntu-latest
-    if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
-    
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set PR Status to Failure
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/${{ github.repository }}/statuses/${{ github.sha }}
-          token: ${{ github.token }}
-          state: field
-          status: field
-          description: Tests not passed
-          context: CI/Tests
-
-  notify_teams_failed:
-    needs: change_status
-    runs-on: ubuntu-latest
-    if: ${{ success() }}
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
-        if: always()
-        with:
-          github-token: ${{ github.token }}
-          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
-          card-layout-start: compact
-          environment: development
-          show-on-failure: true   
-  
