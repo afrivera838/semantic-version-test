@@ -49,16 +49,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set PR Status to Failure
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/${{ github.repository }}/statuses/${{ github.sha }}
-          token: ${{ github.token }}
-          state: field
-          status: field
-          description: Tests not passed
-          context: CI/Tests
-
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
         with:
