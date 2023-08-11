@@ -1,8 +1,9 @@
-name: Push Development
+name: Pull Request Development
 
 on:
-  push:
+  pull_request:
     branches: [ development ]
+    types: [opened, synchronize, reopened]
 
 jobs:
 
@@ -55,8 +56,5 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
           environment: development
-          show-on-failure: true  
-
-      - name: No merge
-        run: exit 1
+          show-on-failure: true   
   
