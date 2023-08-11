@@ -41,14 +41,37 @@ jobs:
           environment: development
           show-on-failure: true   
 
-  notify_teams_failed:
-    needs: run_tests
+  update_pr_status:
     runs-on: ubuntu-latest
     if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
-    
+    needs: run_tests
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Update PR Status
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        PR_NUMBER=$(echo "${{ github.ref }}" | sed -n 's/refs\/pull\///p')
+        PR_OWNER="${{ github.repository_owner }}"
+        API_URL="https://api.github.com/repos/${{ PR_OWNER }}/${{ github.repository }}/statuses/${{ github.sha }}"
+        
+        curl -X POST \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d '{
+            "state": "failure",
+            "context": "Custom Status",
+            "description": "Custom status description"
+          }' \
+          "$API_URL"        
+
+  notify_teams_failed:
+    needs: [update_pr_status]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
         with:
