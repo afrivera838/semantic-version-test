@@ -41,34 +41,32 @@ jobs:
           environment: development
           show-on-failure: true   
 
-  update_pr_status:
+  change_status:
+    needs: run_tests
     runs-on: ubuntu-latest
     if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
-    needs: run_tests
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Update PR Status
-      run: |
-        PR_NUMBER=$(echo "${{ github.ref }}" | sed -n 's/refs\/pull\///p')
-        API_URL="https://api.github.com/repos/${{ github.repository_owner }}/${{ github.repository }}/statuses/${{ github.sha }}"
-        
-        curl -X POST \
-          -H "Authorization: token ${{ github.token }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          -d '{
-            "state": "failure",
-            "context": "Custom Status",
-            "description": "Custom status description"
-          }' \
-          "$API_URL"        
-
-  notify_teams_failed:
-    needs: [update_pr_status]
-    runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set PR Status to Failure
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/${{ github.repository }}/statuses/${{ github.sha }}
+          token: ${{ github.token }}
+          state: field
+          status: field
+          description: Tests not passed
+          context: CI/Tests
+
+  notify_teams_failed:
+    needs: change_status
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+
+    steps:
+      - uses: actions/checkout@v2
+
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
         with:
