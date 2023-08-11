@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Pull Request Notify Teams
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened, labeled]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  notify_teams:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          # card-layout-start: compact
+          custom-facts: |
+            - name: Custom Fact Name 1
+              value: Custom Fact Value 1
+            - name: Pull Request example
+          environment: development
+          show-on-failure: true
+
+
+  #notify_teams_merge:
+  #  if: github.event.pull_request.merged == true
+   # runs-on: ubuntu-latest
+    #steps:
+    #  - uses: actions/checkout@v2
+     # - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+      #  if: always()
+       # with:
+        #  github-token: ${{ github.token }}
+        #  webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+         # custom-facts: |
+          #  - name: Custom Fact Name 1
+           #   value: Custom Fact Value 1
+           # - name: Pull Request example
+          #environment: development
+          #show-on-failure: true
