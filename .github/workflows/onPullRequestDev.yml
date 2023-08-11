@@ -28,7 +28,8 @@ jobs:
   notify_teams:
     needs: run_tests
     runs-on: ubuntu-latest
-    if: always()
+    if: ${{ success() }}
+    
     steps:
       - uses: actions/checkout@v2
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
@@ -39,3 +40,34 @@ jobs:
           # card-layout-start: compact
           environment: development
           show-on-failure: true   
+
+  change_status:
+    needs: run_tests
+    runs-on: ubuntu-latest
+    if: ${{ failure() && needs.run_tests.outputs.job_id == github.job }}
+    steps:
+    - name: Check test result
+      run: |
+        if [ $? -ne 0 ]; then
+          echo "Tests failed. Blocking merge."
+          exit 1
+        fi
+
+  notify_teams_failed:
+    needs: change_status
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          card-layout-start: compact
+          environment: development
+          show-on-failure: true   
+  
