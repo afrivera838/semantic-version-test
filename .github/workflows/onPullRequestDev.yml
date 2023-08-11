@@ -1,7 +1,7 @@
 name: Pull Request Development
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ development ]
     types: [opened, synchronize, reopened]
 
