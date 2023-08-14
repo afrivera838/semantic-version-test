@@ -2,7 +2,7 @@ name: Push Stage
 
 on:
   push:
-    branches: [ development ]
+    branches: [ stage ]
 
 jobs:
 

@@ -1,9 +1,8 @@
-name: Pull Request Development
+name: Push Main
 
 on:
-  pull_request:
-    branches: [ development ]
-    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main ]
 
 jobs:
 
@@ -24,9 +23,27 @@ jobs:
 
       - name: Create coverage
         run: npm run test -- --coverage
-        
+
+  semantic_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.17
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release
+
   notify_teams:
-    needs: run_tests
+    needs: [run_tests, semantic_release]
     runs-on: ubuntu-latest
     if: ${{ success() }}
     
@@ -38,11 +55,11 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
-          environment: development
+          environment: production
           show-on-failure: true   
 
   notify_teams_failed:
-    needs: run_tests
+    needs: [run_tests, semantic_release]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
 
@@ -55,6 +72,9 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
-          environment: development
-          show-on-failure: true   
+          environment: production
+          show-on-failure: true  
+
+      - name: No merge
+        run: exit 1
   
