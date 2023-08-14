@@ -1,8 +1,8 @@
-name: Pull Request Development
+name: Pull Request Stage
 
 on:
   pull_request:
-    branches: [ development ]
+    branches: [ main ]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Create coverage
         run: npm run test -- --coverage
-        
+          
   notify_teams:
     needs: run_tests
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
-          environment: development
+          environment: production
           show-on-failure: true   
 
   notify_teams_failed:
@@ -55,6 +55,8 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
-          environment: development
+          environment: production
           show-on-failure: true   
+      - name: No Pull R
+        run: exit 1
   
