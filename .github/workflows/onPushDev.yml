@@ -1,4 +1,4 @@
-name: Push Development
+name: Push Stage
 
 on:
   push:

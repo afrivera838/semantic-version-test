@@ -75,6 +75,4 @@ jobs:
           environment: production
           show-on-failure: true  
 
-      - name: No merge
-        run: exit 1
   
