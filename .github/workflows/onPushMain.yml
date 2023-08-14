@@ -1,0 +1,80 @@
+name: Push Main
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install -f
+
+      - name: Create coverage
+        run: npm run test -- --coverage
+
+  semantic_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.17
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release
+
+  notify_teams:
+    needs: [run_tests, semantic_release]
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          # card-layout-start: compact
+          environment: production
+          show-on-failure: true   
+
+  notify_teams_failed:
+    needs: [run_tests, semantic_release]
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          card-layout-start: compact
+          environment: production
+          show-on-failure: true  
+
+      - name: No merge
+        run: exit 1
+  

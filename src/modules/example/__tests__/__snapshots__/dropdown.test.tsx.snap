@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Root component should be in the document 1`] = `
+<div>
+  <div>
+    <h1
+      class="colorBlue smallText"
+    >
+      Hello Boilerplate!
+    </h1>
+  </div>
+</div>
+`;

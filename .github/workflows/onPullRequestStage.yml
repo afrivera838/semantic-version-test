@@ -1,0 +1,62 @@
+name: Pull Request Stage
+
+on:
+  pull_request:
+    branches: [ stage ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install -f
+
+      - name: Create coverage
+        run: npm run test -- --coverage
+        
+  notify_teams:
+    needs: run_tests
+    runs-on: ubuntu-latest
+    if: ${{ success() }}
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          # card-layout-start: compact
+          environment: development
+          show-on-failure: true   
+
+  notify_teams_failed:
+    needs: run_tests
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
+        if: always()
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
+          card-layout-start: compact
+          environment: development
+          show-on-failure: true   
+      - name: No Pull R
+        run: exit 1
+  
