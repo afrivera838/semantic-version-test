@@ -25,6 +25,7 @@ jobs:
         run: npm run test -- --coverage
 
   semantic_release:
+    needs: [run_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.17
+          node-version: 18
 
       - name: Install Dependencies
         run: yarn install
