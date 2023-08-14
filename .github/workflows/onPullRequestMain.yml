@@ -1,4 +1,4 @@
-name: Pull Request Stage
+name: Pull Request Main
 
 on:
   pull_request:

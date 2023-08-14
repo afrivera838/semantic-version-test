@@ -1,8 +1,8 @@
-name: Push Development
+name: Push Main
 
 on:
   push:
-    branches: [ stage ]
+    branches: [ main ]
 
 jobs:
 
