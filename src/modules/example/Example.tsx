@@ -7,4 +7,4 @@ const Example = () => (
   </div>
 );
 
-export default Example
+export default Example;

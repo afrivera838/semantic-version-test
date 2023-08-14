@@ -2,10 +2,9 @@ name: Push Main
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-
   run_tests:
     runs-on: ubuntu-latest
 
@@ -20,6 +19,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install -f
+
+      - name: Run ESLint
+        run: npm run lint .
 
       - name: Create coverage
         run: npm run test -- --coverage
@@ -47,7 +49,7 @@ jobs:
     needs: [run_tests, semantic_release]
     runs-on: ubuntu-latest
     if: ${{ success() }}
-    
+
     steps:
       - uses: actions/checkout@v2
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
@@ -57,7 +59,7 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
           environment: production
-          show-on-failure: true   
+          show-on-failure: true
 
   notify_teams_failed:
     needs: [run_tests, semantic_release]
@@ -74,6 +76,4 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
           environment: production
-          show-on-failure: true  
-
-  
+          show-on-failure: true
