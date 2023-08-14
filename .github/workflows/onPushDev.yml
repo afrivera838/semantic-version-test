@@ -2,7 +2,7 @@ name: Push Stage
 
 on:
   push:
-    branches: [ development ]
+    branches: [ stage ]
 
 jobs:
 
@@ -57,6 +57,4 @@ jobs:
           environment: development
           show-on-failure: true  
 
-      - name: No merge
-        run: exit 1
   

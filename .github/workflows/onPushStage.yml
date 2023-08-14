@@ -56,7 +56,3 @@ jobs:
           card-layout-start: compact
           environment: development
           show-on-failure: true  
-
-      - name: No merge
-        run: exit 1
-  

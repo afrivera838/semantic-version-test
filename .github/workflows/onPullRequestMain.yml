@@ -2,7 +2,7 @@ name: Pull Request Main
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -57,6 +57,4 @@ jobs:
           card-layout-start: compact
           environment: production
           show-on-failure: true   
-      - name: No Pull R
-        run: exit 1
   

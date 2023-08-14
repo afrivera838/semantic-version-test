@@ -56,7 +56,5 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
           environment: development
-          show-on-failure: true   
-      - name: No Pull R
-        run: exit 1
+          show-on-failure: true  
   
