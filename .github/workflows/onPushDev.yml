@@ -82,14 +82,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check Conditions and Set Workflow Status
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            if (condition_not_met) {
-              github.actions.setFailed("Condition not met");
-            }
+      - name: Set Pull Request Status
+        run: |
+          PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
+          URL="repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
+          CONTEXT="Test Status"
+
+          DATA="{\"state\": \"failure\", \"context\": \"$CONTEXT\", \"description\": \"Tests failed\", \"target_url\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}"
+
+          echo "Setting status to failure..."
+          curl -s -X POST -H "Authorization: Bearer ${{ github.token }}" -d "$DATA" "https://api.github.com/$URL/statuses/$GITHUB_SHA"
 
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
