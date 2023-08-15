@@ -5,29 +5,67 @@ on:
     branches: [development]
 
 jobs:
-  run_tests:
+
+  setup:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+
+  run_tests:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Restore node modules cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install -f
-      
-      - name: Run ESLint
-        run: npm run lint .
-
       - name: Create coverage
-        run: npm run test -- --coverage
+        run: npm run test --coverage
+
+  eslint:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Restore node modules cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Run ESLint
+      run: npm run lint
 
   notify_teams:
-    needs: run_tests
+    needs: [run_tests, eslint]
     runs-on: ubuntu-latest
     if: ${{ success() }}
 
@@ -43,7 +81,7 @@ jobs:
           show-on-failure: true
 
   notify_teams_failed:
-    needs: run_tests
+    needs: [run_tests, eslint]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
 
