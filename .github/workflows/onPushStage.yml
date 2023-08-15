@@ -5,7 +5,7 @@ on:
     branches: [stage]
 
 jobs:
-  run_tests:
+  run_tests_eslint:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,15 +19,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install -f
-
+      
       - name: Run ESLint
-        run: npm run lint .
+        run: npm run lint
 
       - name: Create coverage
         run: npm run test -- --coverage
 
   notify_teams:
-    needs: run_tests
+    needs: run_tests_eslint
     runs-on: ubuntu-latest
     if: ${{ success() }}
 
@@ -43,7 +43,7 @@ jobs:
           show-on-failure: true
 
   notify_teams_failed:
-    needs: run_tests
+    needs: run_tests_eslint
     runs-on: ubuntu-latest
     if: ${{ failure() }}
 
