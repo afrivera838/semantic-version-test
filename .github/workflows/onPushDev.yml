@@ -95,8 +95,8 @@ jobs:
 
           echo "Setting status to failure..."
           curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -d "$DATA" "https://api.github.com/repos/$REPO/statuses/$SHA"
-          sleep 5 
 
+      - uses: toko-bifrost/ms-teams-deploy-card@master 
         if: always()
         with:
           github-token: ${{ github.token }}
