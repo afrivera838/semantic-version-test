@@ -1,18 +1,18 @@
-import { defineConfig } from 'vite'
-import reactRefresh from '@vitejs/plugin-react-refresh'
-import dynamicImport from 'vite-plugin-dynamic-import'
+import { defineConfig } from 'vite';
+import reactRefresh from '@vitejs/plugin-react-refresh';
+import dynamicImport from 'vite-plugin-dynamic-import';
 
-const path = require('path')
+const path = require('path');
 const { parsed } = require('dotenv').config({
   path: path.resolve(__dirname, './.env'),
-})
+});
 
 export default defineConfig((): any => {
-  const publicAssetsBaseUrl = 'http://localhost:3002/'
+  const publicAssetsBaseUrl = 'http://localhost:3002/';
 
   return {
     define: {
-      'process.env': {}
+      'process.env': {},
     },
     root: './src',
     base: publicAssetsBaseUrl,
@@ -38,6 +38,5 @@ export default defineConfig((): any => {
     },
     plugins: [reactRefresh(), dynamicImport()],
     assetsInclude: ['**/*.png', '**/*.jpg', '**/*.svg'],
-  }
-})
-
+  };
+});

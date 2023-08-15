@@ -9,10 +9,8 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import { exampleReducer } from '../modules/example/redux';
-import _ from 'lodash';
 import storageSession from 'redux-persist/lib/storage/session';
 
 const rootReducer = combineReducers({

@@ -1,12 +1,11 @@
-name: Push Stage
+name: Push Development
 
 on:
   push:
-    branches: [ development ]
+    branches: [development]
 
 jobs:
-
-  run_tests:
+  run_tests_eslint:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,15 +19,18 @@ jobs:
 
       - name: Install dependencies
         run: npm install -f
+      
+      - name: Run ESLint
+        run: npm run lint
 
       - name: Create coverage
         run: npm run test -- --coverage
-        
+
   notify_teams:
-    needs: run_tests
+    needs: run_tests_eslint
     runs-on: ubuntu-latest
     if: ${{ success() }}
-    
+
     steps:
       - uses: actions/checkout@v2
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
@@ -38,10 +40,10 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
           environment: development
-          show-on-failure: true   
+          show-on-failure: true
 
   notify_teams_failed:
-    needs: run_tests
+    needs: run_tests_eslint
     runs-on: ubuntu-latest
     if: ${{ failure() }}
 
@@ -55,8 +57,4 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
           environment: development
-          show-on-failure: true  
-
-      - name: No merge
-        run: exit 1
-  
+          show-on-failure: true

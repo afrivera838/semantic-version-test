@@ -1,16 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { store } from '../../../store';
 import Example from '../Example';
 
-interface Props {
-  statusEvents: (a:string) => void;
-}
-
 describe('Root component', () => {
-  function renderApp(props?: Props) {
+  function renderApp() {
     return {
       ...render(
         <BrowserRouter>

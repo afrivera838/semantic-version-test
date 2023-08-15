@@ -4,9 +4,11 @@ import { setNotPermissions } from './SetNotPermissions/SetNotPermissions';
 import { messageMethods } from '../constants/messageMethods';
 
 export const interceptorOK = response => {
-  const { data: { data: responseData } } = response;
+  const {
+    data: { data: responseData },
+  } = response;
   if (response.status === 201) {
-    Swal.fire('Successfully', customMessage(responseData), 'success');
+    //Swal.fire('Successfully', customMessage(responseData), 'success');
   } else if (response.data.errors?.length) {
     Swal.fire({
       text: response.data.errors[0],

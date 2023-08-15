@@ -2,11 +2,10 @@ name: Push Main
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-
-  run_tests:
+  run_tests_eslint:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +19,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install -f
+      
+      - name: Run ESLint
+        run: npm run lint
 
       - name: Create coverage
         run: npm run test -- --coverage
 
   semantic_release:
+    needs: [run_tests_eslint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.17
+          node-version: 18
 
       - name: Install Dependencies
         run: yarn install
@@ -43,10 +46,10 @@ jobs:
         run: npx semantic-release
 
   notify_teams:
-    needs: [run_tests, semantic_release]
+    needs: [run_tests_eslint, semantic_release]
     runs-on: ubuntu-latest
     if: ${{ success() }}
-    
+
     steps:
       - uses: actions/checkout@v2
       - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
@@ -56,10 +59,10 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
           environment: production
-          show-on-failure: true   
+          show-on-failure: true
 
   notify_teams_failed:
-    needs: [run_tests, semantic_release]
+    needs: [run_tests_eslint, semantic_release]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
 

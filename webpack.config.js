@@ -17,7 +17,7 @@ module.exports = (webpackConfigEnv, argv) => {
       }),
     ],
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.scss'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
     },
     module: {
       rules: [
