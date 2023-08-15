@@ -58,3 +58,11 @@ jobs:
           card-layout-start: compact
           environment: development
           show-on-failure: true
+          
+      - name: Revert Push if Tests Fail
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ github.token }}
+          force: true
+          branch: ${{ github.ref }}
+          directory: . 
