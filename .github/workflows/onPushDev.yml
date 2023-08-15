@@ -36,6 +36,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Use Cached Node Modules
+        run: npm ci
       
       - name: Run ESLint
         run: npm run lint
