@@ -39,7 +39,7 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           # card-layout-start: compact
-          environment: development
+          environment: stage
           show-on-failure: true
 
   notify_teams_failed:
@@ -56,5 +56,5 @@ jobs:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
-          environment: development
+          environment: stage
           show-on-failure: true
