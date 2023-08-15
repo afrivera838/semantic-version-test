@@ -76,6 +76,4 @@ jobs:
           webhook-uri: ${{ secrets.TEAMS_WEBHOOK }}
           card-layout-start: compact
           environment: production
-          show-on-failure: true  
-
-  
+          show-on-failure: true
