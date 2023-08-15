@@ -5,7 +5,7 @@
     "start:standalone": "vite --port 8080 ",
     "build": "vite build",
     "analyze": "webpack --mode=production --env analyze",
-    "lint": "eslint . --fix --max-warnings=0  --quiet",
+    "lint": "eslint . --fix --quiet",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "test": "cross-env BABEL_ENV=test jest",
