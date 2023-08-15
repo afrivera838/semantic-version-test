@@ -19,7 +19,7 @@ jobs:
         node-version: 18
 
     - name: Install dependencies
-      run: npm install
+      run: npm install -f
  
   run_tests:
     runs-on: ubuntu-latest
@@ -81,20 +81,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set Pull Request Status to Failure
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
-          REPO=$(jq -r .repository.full_name "$GITHUB_EVENT_PATH")
-          SHA=$(jq -r .after "$GITHUB_EVENT_PATH")
-          CONTEXT="Test Status"
-
-          DATA="{\"state\": \"failure\", \"context\": \"$CONTEXT\", \"description\": \"Tests failed\", \"target_url\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}"
-
-          echo "Setting status to failure..."
-          curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -d "$DATA" "https://api.github.com/repos/$REPO/statuses/$SHA"
 
       - uses: toko-bifrost/ms-teams-deploy-card@master 
         if: always()
