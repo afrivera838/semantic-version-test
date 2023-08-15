@@ -18,14 +18,8 @@ jobs:
       with:
         node-version: 18
 
-    - name: Cache node modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
+    - name: Install dependencies
+      run: npm install
 
   run_tests:
     runs-on: ubuntu-latest
