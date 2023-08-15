@@ -82,18 +82,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set Pull Request Status
+      - name: Set Pull Request Status to Failure
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
-          URL="repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER"
+          REPO=$(jq -r .repository.full_name "$GITHUB_EVENT_PATH")
+          SHA=$(jq -r .after "$GITHUB_EVENT_PATH")
           CONTEXT="Test Status"
 
           DATA="{\"state\": \"failure\", \"context\": \"$CONTEXT\", \"description\": \"Tests failed\", \"target_url\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}"
 
           echo "Setting status to failure..."
-          curl -s -X POST -H "Authorization: Bearer ${{ github.token }}" -d "$DATA" "https://api.github.com/$URL/statuses/$GITHUB_SHA"
+          curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -d "$DATA" "https://api.github.com/repos/$REPO/statuses/$SHA"
+          sleep 5 
 
-      - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
         if: always()
         with:
           github-token: ${{ github.token }}
