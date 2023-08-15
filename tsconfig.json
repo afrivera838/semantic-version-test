@@ -13,16 +13,16 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "types": ["vite/client", "node", "jest", "@testing-library/jest-dom"],
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
   "files": ["src/abatech-boilerplate.tsx"],
-  "include": ["src"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*jsx", "**/*js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

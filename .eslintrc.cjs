@@ -1,23 +1,26 @@
 module.exports = {
   globals: {
     window: true,
-    module: true
+    module: true,
   },
   root: true,
-  env: { browser: true, es2020: true, amd: true, node: true},
+  env: { browser: true, es2020: true, amd: true, node: true },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react-hooks/recommended',
+    'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts', 'dist', 'webpack.config.js'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
   },
-}
+  plugins: ['react-refresh', '@typescript-eslint'],
+  rules: {
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+  },
+};

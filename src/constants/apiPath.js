@@ -5,8 +5,7 @@ const api = process.env.REACT_APP_API;
 axios.defaults.baseURL = api;
 
 const pathObj = {
-  baseURL: api,
-  frontUrl: url,
+  baseURL: api
 };
 export const interceptroAxios = axios.interceptors.response.use(interceptorOK, interceptorError);
 
